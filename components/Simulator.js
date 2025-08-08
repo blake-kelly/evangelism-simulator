@@ -6,7 +6,19 @@ export default function Simulator() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setResponse("Thanks for your message. Here's a thoughtful reply from the AI.");
+    setResponse("...");
+    try {
+      const res = await fetch("/api/evangelism-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await res.json();
+      setResponse(data.reply);
+    } catch (err) {
+      setResponse("Error: Could not connect to the server.");
+    }
     setInput("");
   };
 
